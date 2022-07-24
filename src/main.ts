@@ -6,22 +6,17 @@ import {
     LiveTranscriptionRequest
 } from "transcription-lib-grpc-js/src/generated/live-subtitling_pb";
 
+// just an example we use green color to show finalized subtitles
 const GREEN ="\x1b[0;92m";
 const RESET='\x1b[0m';
-const host = process.env.HOST ?? '0.0.0.0:9090';
-const API_KEY = process.env.API_KEY;
+const host = 'live.citizenjournalist.io:443' ;
+const API_KEY = process.env.API_KEY; // pass your API key
 
-// const metaCallback  = (_params, callback) => {
-//     const meta = new grpc.Metadata();
-//     meta.add("Authorization", `Bearer ${API_KEY}`)
-//     callback(null, meta)
-// }
+const client = new LiveSubtitlingClient(host, grpc.credentials.createSsl());
 
-const client = new LiveSubtitlingClient(host, grpc.credentials.createInsecure());
-
-const sampleVideoUrl = 'rtmp://127.0.0.1:1935/live/swissinfo'
+const sampleVideoUrl = 'https://cdn3.wowza.com/1/eGlOcmxqcnMxMXJE/dVVnR3o1/hls/live/playlist.m3u8'; // put in your video target
 const request = new LiveTranscriptionRequest();
-request.setExternalreference('myexampletest');
+request.setExternalreference('myexampletest'); // just to be able to reference a request, gets returned in the response
 request.setSourceurl(sampleVideoUrl);
 request.setSourcelanguage(Language.DE);
 
@@ -34,3 +29,15 @@ stream.on('data', (response: LiveTranscriptionReply) => {
     // final means its the final result for the section we print it in green color
     console.log(`${response.getIsfinal() ? GREEN : ''} > ${response.getResult()} ${RESET}`);
 })
+stream.on('end', () => {
+    console.log('The End')
+    // The server has finished sending
+});
+stream.on('error', (error) => {
+    // An error has occurred and the stream has been closed.
+    console.error(error)
+});
+stream.on('status', function(status) {
+    // process status
+    console.log(status);
+});
