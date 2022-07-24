@@ -27,4 +27,9 @@ in the code please replace the video stream url
 
 it will print the transcriptions to the console.
 
-When the text is green it means it was finalized.
+When the text is green it means it was finalized. 
+This section of text won't change anymore.
+
+more information at:
+
+https://github.com/The-Crocop/transcription-lib-grpc-js
