@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "transcription-lib-grpc-js": "0.5.0"
+    "transcription-lib-grpc-js": "0.8.2"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.3",
